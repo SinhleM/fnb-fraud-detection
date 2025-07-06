@@ -1,0 +1,16 @@
+user_id,name,email,account_type,province,signup_date
+1001,Sizwe Dlamini,sizwe.dlamini@email.co.za,Cheque,Gauteng,2023-08-21
+1002,Nomusa Khumalo,nomusa.k@webmail.co.za,Savings,KwaZulu-Natal,2022-03-10
+1003,Jan van der Merwe,jan.vdmerwe@mail.co.za,Business,Western Cape,2024-01-05
+1004,Lerato Mohlala,lerato.m@email.com,Youth,Limpopo,2021-11-28
+1005,Pravin Naidoo,pravin.n@webmail.com,Premier,Eastern Cape,2023-05-17
+1006,Zandile Ndlovu,zandile.n@mail.co.za,Cheque,Mpumalanga,2022-09-03
+1007,Ben Coetzee,ben.c@email.co.za,Savings,Free State,2024-04-12
+1008,Ayanda Mkhize,ayanda.m@webmail.co.za,Business,Northern Cape,2020-12-01
+1009,Sarah Jones,sarah.j@email.com,Youth,North West,2023-02-25
+1010,Thandiwe Zulu,thandiwe.z@mail.co.za,Premier,Gauteng,2022-07-08
+1011,Michael Adams,michael.a@webmail.com,Cheque,Western Cape,2024-06-30
+1012,Naledi Sibiya,naledi.s@email.co.za,Savings,KwaZulu-Natal,2023-10-14
+1013,Pieter Botha,pieter.b@mail.co.za,Business,Eastern Cape,2021-09-07
+1014,Refilwe Khoza,refilwe.k@webmail.co.za,Youth,Limpopo,2023-01-01
+1015,David Williams,david.w@email.com,Premier,Mpumalanga,2022-04-20
