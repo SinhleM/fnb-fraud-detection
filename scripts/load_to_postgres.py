@@ -5,8 +5,8 @@ from sqlalchemy import create_engine
 import os
 
 # Load environment variables or hardcode your credentials here
-DB_USER = os.getenv("POSTGRES_USER", "postgres_admin")
-DB_PASSWORD = os.getenv("POSTGRES_PASSWORD", "Admin1234")
+DB_USER = os.getenv("POSTGRES_USER", "postgres_admin1")
+DB_PASSWORD = os.getenv("POSTGRES_PASSWORD", "Admin@1234")
 DB_HOST = os.getenv("POSTGRES_HOST", "localhost")
 DB_PORT = os.getenv("POSTGRES_PORT", "5432")
 DB_NAME = os.getenv("POSTGRES_DB", "fnb_fraud_db")
