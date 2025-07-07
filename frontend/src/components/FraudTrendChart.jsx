@@ -12,10 +12,11 @@ const getWeekNumber = (d) => {
     return `Week ${weekNo}`;
 };
 
-
 const FraudTrendChart = ({ data }) => {
     const weeklyData = data.reduce((acc, curr) => {
-        const week = getWeekNumber(new Date(curr.date));
+        const dateObj = new Date(curr.timestamp);
+        if (isNaN(dateObj)) return acc; // skip invalid date
+        const week = getWeekNumber(dateObj);
         acc[week] = (acc[week] || 0) + 1;
         return acc;
     }, {});
@@ -52,7 +53,7 @@ const FraudTrendChart = ({ data }) => {
             y: {
                 beginAtZero: true,
                 grid: {
-                    color: '#e5e7eb', // gray-200
+                    color: '#e5e7eb',
                 },
             },
             x: {

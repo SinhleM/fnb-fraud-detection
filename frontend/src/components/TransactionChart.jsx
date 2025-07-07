@@ -6,8 +6,12 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 const TransactionChart = ({ data }) => {
     const monthlyData = data.reduce((acc, curr) => {
-        const month = new Date(curr.date).toLocaleString('default', { month: 'short' });
-        acc[month] = (acc[month] || 0) + 1;
+        const dateObj = new Date(curr.timestamp);
+        if (isNaN(dateObj)) return acc; // skip invalid dates
+
+        // Group by "Jul 2025", "Aug 2025", etc.
+        const monthYear = dateObj.toLocaleDateString('default', { year: 'numeric', month: 'short' });
+        acc[monthYear] = (acc[monthYear] || 0) + 1;
         return acc;
     }, {});
 
@@ -43,7 +47,7 @@ const TransactionChart = ({ data }) => {
             y: {
                 beginAtZero: true,
                 grid: {
-                    color: '#e5e7eb', // gray-200
+                    color: '#e5e7eb',
                 },
             },
             x: {
