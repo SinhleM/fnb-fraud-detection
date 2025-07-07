@@ -1,0 +1,11 @@
+user_id,name,email,account_type,province,signup_date
+1001,Allison Hill,allison.hill@webmail.co.za,Cheque,Gauteng,2023-06-18
+1002,Brian Yang,brian.yang@webmail.co.za,Youth,North West,2024-10-31
+1003,Javier Johnson,javier.johnson@webmail.co.za,Premier,KwaZulu-Natal,2023-06-11
+1004,Lance Hoffman,lance.hoffman@webmail.co.za,Youth,Eastern Cape,2025-04-11
+1005,Jennifer Cole,jennifer.cole@webmail.co.za,Premier,North West,2023-09-12
+1006,Abigail Shaffer,abigail.shaffer@mail.co.za,Savings,Free State,2025-06-25
+1007,Donald Lewis,donald.lewis@webmail.co.za,Cheque,Free State,2023-12-11
+1008,James Howard,james.howard@mail.co.za,Premier,Gauteng,2023-12-23
+1009,Renee Blair,renee.blair@email.co.za,Business,North West,2024-10-17
+1010,Thomas Miller,thomas.miller@email.co.za,Savings,KwaZulu-Natal,2023-10-05

@@ -1,11 +1,11 @@
 # scripts/generate_transactions.py
-
+from urllib.parse import quote_plus
 import pandas as pd
 from faker import Faker
 import random
 from datetime import timedelta
 
-fake = Faker('en_ZA')
+fake = Faker('en_US')
 Faker.seed(123)
 
 MERCHANTS = [

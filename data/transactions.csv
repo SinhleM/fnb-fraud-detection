@@ -1,5 +1,4 @@
 transaction_id,user_id,timestamp,amount,type,channel,location,merchant
-
 20001,1001,2025-06-25 10:30:00,150.75,Purchase,POS,"Sandton, GP",Woolworths
 20002,1002,2025-06-25 11:45:10,500.00,Withdrawal,ATM,"Durban CBD, KZN",FNB ATM
 20003,1003,2025-06-25 13:00:20,3500.00,Transfer,Online,"Cape Town, WC",Other Bank
