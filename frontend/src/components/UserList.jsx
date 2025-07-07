@@ -1,47 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React from 'react';
 
-export default function UserList() {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+const UserList = ({ users }) => {
+    return (
+        <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4">Top Users</h2>
+            <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                        <tr>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Account Type</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</th>
+                        </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {users.slice(0, 5).map((user) => ( // Displaying top 5 for brevity
+                            <tr key={user.id} className="hover:bg-gray-50">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user.name}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.account_type}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(user.last_login).toLocaleDateString()}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
 
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/users")
-      .then((res) => res.json())
-      .then((data) => {
-        setUsers(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
-
-  if (loading) return <p>Loading users...</p>;
-
-  return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white rounded shadow">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="py-2 px-4">User ID</th>
-            <th className="py-2 px-4">Name</th>
-            <th className="py-2 px-4">Email</th>
-            <th className="py-2 px-4">Account Type</th>
-            <th className="py-2 px-4">Province</th>
-            <th className="py-2 px-4">Signup Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(({ user_id, name, email, account_type, province, signup_date }) => (
-            <tr key={user_id} className="border-b hover:bg-gray-50">
-              <td className="py-2 px-4">{user_id}</td>
-              <td className="py-2 px-4">{name}</td>
-              <td className="py-2 px-4">{email}</td>
-              <td className="py-2 px-4">{account_type}</td>
-              <td className="py-2 px-4">{province}</td>
-              <td className="py-2 px-4">{signup_date}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
+export default UserList;

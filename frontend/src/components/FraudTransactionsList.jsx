@@ -1,14 +1,15 @@
 import React from 'react';
 
-const TransactionsList = ({ transactions }) => {
-    // Assuming transactions is an array of all transaction objects
-    const recentTransactions = transactions
+const FraudTransactionsList = ({ transactions }) => {
+    // Assuming transactions is an array of fraud transaction objects
+    const recentFraudTransactions = transactions
+        .filter(tx => tx.is_fraud)
         .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 10); // Show the 10 most recent transactions
+        .slice(0, 7); // Show the 7 most recent fraudulent transactions
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4">All Recent Transactions</h2>
+            <h2 className="text-xl font-semibold mb-4">Recent Fraudulent Transactions</h2>
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
@@ -21,29 +22,23 @@ const TransactionsList = ({ transactions }) => {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {recentTransactions.length > 0 ? (
-                            recentTransactions.map((tx) => (
+                        {recentFraudTransactions.length > 0 ? (
+                            recentFraudTransactions.map((tx) => (
                                 <tr key={tx.id} className="hover:bg-gray-50">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{tx.user_name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${parseFloat(tx.amount).toFixed(2)}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">${parseFloat(tx.amount).toFixed(2)}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tx.merchant}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(tx.date).toLocaleString()}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                        {tx.is_fraud ? (
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                Fraud
-                                            </span>
-                                        ) : (
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                Normal
-                                            </span>
-                                        )}
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            ⚠️ Fraud
+                                        </span>
                                     </td>
                                 </tr>
                             ))
                         ) : (
-                             <tr>
-                                <td colSpan="5" className="px-6 py-4 text-center text-sm text-gray-500">No transactions found.</td>
+                            <tr>
+                                <td colSpan="5" className="px-6 py-4 text-center text-sm text-gray-500">No fraudulent transactions found.</td>
                             </tr>
                         )}
                     </tbody>
@@ -53,4 +48,4 @@ const TransactionsList = ({ transactions }) => {
     );
 };
 
-export default TransactionsList;
+export default FraudTransactionsList;

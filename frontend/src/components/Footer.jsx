@@ -1,9 +1,13 @@
-import React from "react";
+import React from 'react';
 
-export default function Footer() {
-  return (
-    <footer className="bg-gray-800 text-white text-center p-4 mt-auto">
-      <p>© 2025 FNB Fraud Detection. All rights reserved.</p>
-    </footer>
-  );
-}
+const Footer = () => {
+    return (
+        <footer className="bg-gray-100 py-4 mt-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500">
+                <p>Built by <a href="https://github.com/your-github" target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-700 hover:text-black">Sinhle Mkhabela</a></p>
+            </div>
+        </footer>
+    );
+};
+
+export default Footer;

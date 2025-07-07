@@ -1,45 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React from 'react';
 
-export default function FraudTransactionList() {
-  const [fraudTxns, setFraudTxns] = useState([]);
-  const [loading, setLoading] = useState(true);
+const FraudTransactionsList = ({ transactions }) => {
+    return (
+        <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4">Recent Fraudulent Transactions</h2>
+            <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                        <tr>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction ID</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Merchant</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {transactions.slice(0, 7).map((tx) => ( // Displaying top 7 for brevity
+                            <tr key={tx.id} className="hover:bg-gray-50">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-500">{tx.id}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{tx.user_name}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">${parseFloat(tx.amount).toFixed(2)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tx.merchant}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(tx.date).toLocaleString()}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        ⚠️ Flagged
+                                    </span>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
 
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/fraud-transactions")
-      .then((res) => res.json())
-      .then((data) => {
-        setFraudTxns(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
-
-  if (loading) return <p>Loading flagged transactions...</p>;
-
-  return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white rounded shadow">
-        <thead>
-          <tr className="bg-red-200">
-            <th className="py-2 px-4">Transaction ID</th>
-            <th className="py-2 px-4">User ID</th>
-            <th className="py-2 px-4">Timestamp</th>
-            <th className="py-2 px-4">Amount</th>
-            <th className="py-2 px-4">Rules Applied</th>
-          </tr>
-        </thead>
-        <tbody>
-          {fraudTxns.map(({ transaction_id, user_id, timestamp, amount, rules_applied }) => (
-            <tr key={transaction_id} className="border-b hover:bg-red-100">
-              <td className="py-2 px-4">{transaction_id}</td>
-              <td className="py-2 px-4">{user_id}</td>
-              <td className="py-2 px-4">{timestamp}</td>
-              <td className="py-2 px-4">R {amount.toFixed(2)}</td>
-              <td className="py-2 px-4">{rules_applied}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
+export default FraudTransactionsList;
