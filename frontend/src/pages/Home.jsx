@@ -1,3 +1,4 @@
+// frontend/src/pages/Home.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -5,8 +6,8 @@ import StatsCard from '../components/StatsCard';
 import UserList from '../components/UserList';
 import FraudTransactionsList from '../components/FraudTransactionsList';
 import TransactionFilters from '../components/TransactionFilters';
-import DetailModal from '../components/DetailModal';
-import InProjectReadme from '../components/InProjectReadme'; // New Import
+// import DetailModal from '../components/DetailModal'; // REMOVED: No longer a modal
+import InProjectReadme from '../components/InProjectReadme';
 
 // Add these imports for the charts
 import FraudTrendChart from '../components/FraudTrendChart';
@@ -16,13 +17,14 @@ import TransactionChart from '../components/TransactionChart';
 const fetchUsers = () => fetch('http://127.0.0.1:8000/users').then(res => res.json());
 const fetchTransactions = () => fetch('http://127.0.0.1:8000/transactions').then(res => res.json());
 
-const Home = () => {
+// Home component now accepts navigateToUserDetail prop from App.jsx
+const Home = ({ navigateToUserDetail }) => {
     const [users, setUsers] = useState([]);
     const [transactions, setTransactions] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [lastUpdated, setLastUpdated] = useState(null);
-    const [modalData, setModalData] = useState(null);
+    // const [modalData, setModalData] = useState(null); // REMOVED: No longer using modalData
     const [filters, setFilters] = useState({
         dateFrom: '',
         dateTo: '',
@@ -80,6 +82,7 @@ const Home = () => {
         setFilters(prev => ({ ...prev, ...newFilters }));
     };
 
+    // Modified handleUserClick to navigate to the full page detail view
     const handleUserClick = (user) => {
         console.log("Clicked user:", user);
         const userId = Number(user.user_id); // normalize
@@ -89,10 +92,11 @@ const Home = () => {
         });
 
         console.log(`User ${userId} transactions count:`, userTransactions.length);
-        setModalData({ user, transactions: userTransactions });
+        // Call the navigation function passed from App.jsx
+        navigateToUserDetail(user, userTransactions);
     };
 
-    const closeModal = () => setModalData(null);
+    // const closeModal = () => setModalData(null); // REMOVED: No longer needed
 
     const fraudulentTxns = filteredTransactions.filter(t => t.is_fraud).length;
     const totalTxns = filteredTransactions.length;
@@ -128,19 +132,19 @@ const Home = () => {
                     </div>
                 </div>
 
-                {/* Main Content Grid: UserList on left, Fraud List + Readme on right */}
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8"> {/* Added mb-8 for spacing below this section */}
-                    <div className="xl:col-span-1"> {/* UserList takes the first column */}
+                <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
+                    <div className="xl:col-span-1">
+                        {/* Pass navigateToUserDetail down to UserList */}
                         <UserList users={users} transactions={transactions} onUserClick={handleUserClick} />
                     </div>
-                    <div className="xl:col-span-2 flex flex-col gap-8"> {/* This div takes the remaining two columns and stacks its children vertically */}
+                    <div className="xl:col-span-2 flex flex-col gap-8">
                         <FraudTransactionsList transactions={filteredTransactions.filter(tx => tx.is_fraud)} />
-                        <InProjectReadme /> {/* Placed here to slot into the gap */}
+                        <InProjectReadme />
                     </div>
                 </div>
             </main>
             <Footer />
-            <DetailModal isOpen={!!modalData} onClose={closeModal} data={modalData} />
+            {/* <DetailModal isOpen={!!modalData} onClose={closeModal} data={modalData} /> */} {/* REMOVED */}
         </div>
     );
 };

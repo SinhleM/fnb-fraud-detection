@@ -39,6 +39,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# --- Rule Description Mapping ---
+RULE_DESCRIPTIONS = {
+    "AmountExceedsThreshold": "Amount exceeded typical transaction limits",
+    "HighFrequency": "Unusually high transaction frequency detected",
+    "GeoMismatch": "Geographic location mismatch with user's usual activity",
+    "TimeAnomaly": "Transaction occurred at an unusual time of day/night",
+    "NewDevice": "Transaction initiated from a new or unrecognized device",
+    "CardTesting": "Potential card testing activity (small/zero amount transaction)",
+    "HighRiskMerchant": "Transaction with a merchant flagged as high-risk",
+    "MultipleAttempts": "Multiple failed attempts before success (e.g., suspicious login or payment)",
+    "SmallAmountUnusualTime": "Small amount at an unusual time (often linked to testing)",
+    "LargeAmountUnusualChannel": "Large amount via an unusual channel (e.g., unusual online purchase)",
+    # Add any other rules from your detect_fraud.py here
+}
+
+def get_better_rule_wording(rules_string: Optional[str]) -> str:
+    if not rules_string:
+        return ""
+    
+    rule_names = [rule.strip() for rule in rules_string.split(',') if rule.strip()]
+    translated_rules = [RULE_DESCRIPTIONS.get(name, name) for name in rule_names]
+    
+    return ", ".join(translated_rules)
+
+
 # --- Pydantic Models ---
 class User(BaseModel):
     user_id: int
@@ -46,7 +71,8 @@ class User(BaseModel):
     email: str
     account_type: str
     province: str
-    signup_date: str  # String format for JSON
+    signup_date: str
+    initial_balance: Optional[float] = None
 
 class Transaction(BaseModel):
     transaction_id: int
@@ -59,6 +85,9 @@ class Transaction(BaseModel):
     merchant: str
     is_fraud: Optional[int] = None
     rules_applied: Optional[str] = None
+    balance_before_txn: Optional[float] = None
+    balance_after_txn: Optional[float] = None
+    fraud_score: Optional[float] = None
 
 # --- Health Check ---
 @app.get("/health")
@@ -95,6 +124,7 @@ def read_transactions(user_id: Optional[int] = None):
         if user_id:
             query += " WHERE user_id = :user_id"
             params["user_id"] = user_id
+        query += " ORDER BY timestamp DESC"
 
         with engine.connect() as conn:
             result = conn.execute(text(query), params)
@@ -103,6 +133,10 @@ def read_transactions(user_id: Optional[int] = None):
                 txn_dict = row._asdict()
                 if isinstance(txn_dict.get("timestamp"), (pd.Timestamp, date)):
                     txn_dict["timestamp"] = txn_dict["timestamp"].strftime("%Y-%m-%d %H:%M:%S")
+                
+                if "rules_applied" in txn_dict and txn_dict["rules_applied"]:
+                    txn_dict["rules_applied"] = get_better_rule_wording(txn_dict["rules_applied"])
+                    
                 transactions_data.append(txn_dict)
             return transactions_data
     except Exception as e:
@@ -111,15 +145,33 @@ def read_transactions(user_id: Optional[int] = None):
 # --- Get Fraud Transactions ---
 @app.get("/fraud-transactions", response_model=List[Transaction])
 def read_fraud_transactions():
+    print("--- Fetching Fraud Transactions ---") # ADDED FOR DEBUGGING
     try:
         with engine.connect() as conn:
-            result = conn.execute(text("SELECT * FROM transactions WHERE is_fraud = 1"))
+            # Modified: Explicitly select columns and ensure correct filtering
+            result = conn.execute(text("""
+                SELECT
+                    transaction_id, user_id, timestamp, amount, type, channel, location, merchant,
+                    is_fraud, rules_applied, balance_before_txn, balance_after_txn, fraud_score
+                FROM transactions
+                WHERE is_fraud = 1
+                ORDER BY timestamp DESC
+            """))
+            
             fraud_transactions_data = []
             for row in result:
                 txn_dict = row._asdict()
+                # print(f"  Processing transaction: {txn_dict.get('transaction_id')}, is_fraud: {txn_dict.get('is_fraud')}") # UNCOMMENT FOR MORE DETAILED DEBUGGING
                 if isinstance(txn_dict.get("timestamp"), (pd.Timestamp, date)):
                     txn_dict["timestamp"] = txn_dict["timestamp"].strftime("%Y-%m-%d %H:%M:%S")
+                
+                if "rules_applied" in txn_dict and txn_dict["rules_applied"]:
+                    txn_dict["rules_applied"] = get_better_rule_wording(txn_dict["rules_applied"])
+                    
                 fraud_transactions_data.append(txn_dict)
+            
+            print(f"--- Found {len(fraud_transactions_data)} fraud transactions to return ---") # ADDED FOR DEBUGGING
             return fraud_transactions_data
     except Exception as e:
+        print(f"--- Error fetching fraud transactions: {str(e)} ---") # ADDED FOR DEBUGGING
         return {"error": f"Failed to fetch fraud transactions: {str(e)}"}
