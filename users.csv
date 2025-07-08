@@ -1,11 +1,11 @@
 user_id,name,email,account_type,province,signup_date
-1001,Allison Hill,allison.hill@email.co.za,Youth,Gauteng,2023-06-18
-1002,Brian Yang,brian.yang@mail.co.za,Business,Gauteng,2024-10-31
-1003,Javier Johnson,javier.johnson@webmail.co.za,Business,Eastern Cape,2023-06-11
-1004,Lance Hoffman,lance.hoffman@mail.co.za,Savings,Eastern Cape,2025-04-11
-1005,Jennifer Cole,jennifer.cole@email.co.za,Cheque,Limpopo,2023-09-12
-1006,Abigail Shaffer,abigail.shaffer@email.co.za,Savings,North West,2025-06-25
-1007,Donald Lewis,donald.lewis@webmail.co.za,Youth,North West,2023-12-11
-1008,James Howard,james.howard@mail.co.za,Youth,Limpopo,2023-12-23
-1009,Renee Blair,renee.blair@email.co.za,Business,Mpumalanga,2024-10-17
-1010,Thomas Miller,thomas.miller@email.co.za,Cheque,Northern Cape,2023-10-05
+1001,Allison Hill,allison.hill@email.co.za,Youth,North West,2023-06-19
+1002,Brian Yang,brian.yang@email.co.za,Premier,Northern Cape,2024-11-01
+1003,Javier Johnson,javier.johnson@email.co.za,Youth,Limpopo,2023-06-12
+1004,Lance Hoffman,lance.hoffman@webmail.co.za,Premier,Free State,2025-04-12
+1005,Jennifer Cole,jennifer.cole@email.co.za,Premier,Limpopo,2023-09-13
+1006,Abigail Shaffer,abigail.shaffer@mail.co.za,Youth,North West,2025-06-26
+1007,Donald Lewis,donald.lewis@webmail.co.za,Cheque,Gauteng,2023-12-12
+1008,James Howard,james.howard@webmail.co.za,Business,Mpumalanga,2023-12-24
+1009,Renee Blair,renee.blair@mail.co.za,Business,Eastern Cape,2024-10-18
+1010,Thomas Miller,thomas.miller@webmail.co.za,Premier,North West,2023-10-06
