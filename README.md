@@ -1,7 +1,7 @@
 <h1>FNB Fraud Detection</h1>
 
 <p>
-    A data-driven system that detects simulated fraudulent transactions for a South African bank by analyzing transaction patterns and user behavior. It flags suspicious activities to help prevent financial fraud.
+    A data focused system that detects simulated fraudulent transactions for a South African bank by analyzing transaction patterns and user behavior. It flags suspicious activities to help prevent financial fraud.
 </p>
 <p>
     Built to showcase my knowledge in data pipelines and fraud in banking by providing automated fraud detection using synthetic and real-like transaction data. This solution helps my mock bank improve security and reduce financial losses through meaningful insights.
