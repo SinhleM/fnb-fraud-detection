@@ -11,7 +11,7 @@
 
 <h2>Why This Project?</h2>
 <p>
-    Manual fraud detection is slow and and prone to errors. This project automates the process using rule-based detection on generated transaction data, making fraud identification faster and more reliable.
+    Manual fraud detection is slow and is prone to errors. This project automates the process using rule-based detection on generated transaction data, making fraud identification faster and more reliable.
 </p>
 
 <hr>
