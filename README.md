@@ -29,7 +29,7 @@
 
 <h2>Project Information</h2>
 <p>
-    This project generates synthetic user and transaction data imitating a South African bank’s dataset, then applies rule based fraud detection logic to identify potentially fraudulent transactions. The data is stored in PostgreSQL and served via a FastAPI backend, while the frontend visualizes user risk scores and fraud analytics interactively. This design allows easy expansion and integration with real bank data for practical use.
+    This project generates synthetic user and transaction data imitating a South African bank’s dataset, then applies rule based fraud detection logic to identify potentially fraudulent transactions. The data is stored in PostgreSQL and served via a FastAPI backend, while the frontend visualises user risk scores and fraud analytics interactively. This design allows easy expansion and integration with real bank data for practical use.
 </p>
 
 <p>
