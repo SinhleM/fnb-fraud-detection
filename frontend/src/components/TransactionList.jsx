@@ -7,7 +7,8 @@ const TransactionsList = ({ transactions }) => {
         .slice(0, 10); // Show the 10 most recent transactions
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        // Removed rounded-lg and added border border-gray-300
+        <div className="bg-white p-6 shadow-md border border-gray-300">
             <h2 className="text-xl font-semibold mb-4">All Recent Transactions</h2>
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -30,11 +31,13 @@ const TransactionsList = ({ transactions }) => {
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(tx.date).toLocaleString()}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                                         {tx.is_fraud ? (
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            // Removed rounded-full
+                                            <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-medium bg-red-100 text-red-800">
                                                 Fraud
                                             </span>
                                         ) : (
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            // Removed rounded-full
+                                            <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-800">
                                                 Normal
                                             </span>
                                         )}
@@ -42,7 +45,7 @@ const TransactionsList = ({ transactions }) => {
                                 </tr>
                             ))
                         ) : (
-                             <tr>
+                            <tr>
                                 <td colSpan="5" className="px-6 py-4 text-center text-sm text-gray-500">No transactions found.</td>
                             </tr>
                         )}

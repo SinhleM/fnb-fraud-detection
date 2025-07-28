@@ -116,33 +116,36 @@ const Home = () => {
                 isRefreshing={isRefreshing}
                 onRefresh={fetchData}
             />
-            <main className="flex-grow p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full">
+            {/* Removed all padding (p-x classes) from the main element */}
+            <main className="flex-grow max-w-7xl mx-auto w-full">
+                {/* TransactionFilters - Note: This component itself still has an mb-8 in its own file if not updated */}
                 <TransactionFilters filters={filters} setFilters={setFilters} />
 
-                {/* Stats Cards Section - gap-8 removed */}
-                <div className="grid grid-cols-1 lg:grid-cols-4 mb-8">
+                {/* Stats Cards Section - mb-8 removed */}
+                {/* Changed gap-8 to gap-0 for explicit no gap between columns */}
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-0">
                     <StatsCard title="Total Users" value={users.length} />
                     <StatsCard title="Total Transactions" value={totalTransactions} />
                     <StatsCard title="Fraudulent Transactions" value={fraudulentTxns} />
                     <StatsCard title="Fraud Rate" value={fraudRate} />
                 </div>
 
-                {/* Charts Section - gap-8 and rounded-lg removed */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 mb-8">
-                    {/* removed rounded-lg */}
+                {/* Charts Section - mb-8 removed */}
+                {/* Changed gap-8 to gap-0 for explicit no gap between columns */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
                     <div className="bg-white p-6 shadow-md border border-gray-300">
                         <h2 className="text-xl font-semibold mb-4">Monthly Transaction Volume</h2>
                         <TransactionChart data={filteredTransactions} />
                     </div>
-                    {/* removed rounded-lg */}
                     <div className="bg-white p-6 shadow-md border border-gray-300">
                         <h2 className="text-xl font-semibold mb-4">Weekly Fraud Trend</h2>
                         <FraudTrendChart data={filteredTransactions.filter(tx => tx.is_fraud)} />
                     </div>
                 </div>
 
-                {/* UserList and FraudTransactionsList section - gap-8 removed */}
-                <div className="grid grid-cols-1 xl:grid-cols-3">
+                {/* UserList and FraudTransactionsList section - no gap/margin classes */}
+                {/* Changed gap-8 to gap-0 for explicit no gap between columns */}
+                <div className="grid grid-cols-1 xl:grid-cols-3 gap-0">
                     <div className="xl:col-span-1">
                         <UserList users={users} transactions={transactions} onUserClick={handleUserClick} />
                     </div>

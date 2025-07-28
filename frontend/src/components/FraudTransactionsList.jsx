@@ -9,7 +9,8 @@ const FraudTransactionsList = ({ transactions }) => {
         .slice(0, 7);
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        // Removed rounded-lg and added border border-gray-300
+        <div className="bg-white p-6 shadow-md border border-gray-300">
             <h2 className="text-xl font-semibold mb-4">Recent Fraudulent Transactions</h2>
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -33,7 +34,8 @@ const FraudTransactionsList = ({ transactions }) => {
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tx.merchant}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(tx.timestamp).toLocaleString()}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        {/* Removed rounded-full */}
+                                        <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-medium bg-red-100 text-red-800">
                                             ⚠️ Fraud
                                         </span>
                                     </td>

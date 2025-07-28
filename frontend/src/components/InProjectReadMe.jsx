@@ -3,7 +3,8 @@ import React from 'react';
 
 const InProjectReadme = () => {
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        // Removed rounded-lg and added border border-gray-300
+        <div className="bg-white p-6 shadow-md border border-gray-300">
             <h2 className="text-lg font-bold mb-4 text-gray-800">Data Engineering Project: Fraud Detection Dashboard</h2> {/* Smaller heading */}
             <div className="prose prose-xs max-w-none text-gray-700">
                 <p className="mb-4 text-xs"> {/* Applied text-xs */}
