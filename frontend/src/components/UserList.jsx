@@ -37,12 +37,12 @@ const UserList = ({ users = [], transactions = [], onUserClick }) => {
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md h-full flex flex-col">
+        // Added border to UserList component
+        <div className="bg-white p-6 rounded-lg shadow-md h-full flex flex-col border border-gray-300">
             <h2 className="text-xl font-semibold mb-4">Users by Risk Score</h2>
             <div className="flex-grow overflow-y-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
-                        {/* Adjusted formatting for <tr> and <th> tags */}
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Initial Balance</th>
@@ -52,7 +52,6 @@ const UserList = ({ users = [], transactions = [], onUserClick }) => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {usersWithRisk.slice(0, displayLimit).map(user => (
-                            // Adjusted formatting for <tr> and <td> tags
                             <tr
                                 key={user.user_id}
                                 onClick={() => onUserClick && onUserClick(user)}
