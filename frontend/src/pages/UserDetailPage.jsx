@@ -4,7 +4,6 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 const UserDetailPage = ({ user, transactions, onBack }) => {
     if (!user || !transactions) {
         return (
-            // Changed bg-gray-50 to bg-white for the entire page background
             <div className="min-h-screen bg-white flex items-center justify-center">
                 <p className="text-gray-600">No user data to display. Please go back to the dashboard.</p>
                 <button onClick={onBack} className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
@@ -35,7 +34,6 @@ const UserDetailPage = ({ user, transactions, onBack }) => {
     }));
 
     return (
-        // Changed bg-gray-50 to bg-white for the entire page background
         <div className="min-h-screen bg-white flex flex-col">
             <header className="bg-white shadow-sm p-4 sm:p-6 md:p-8 flex items-center justify-between">
                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
@@ -50,8 +48,8 @@ const UserDetailPage = ({ user, transactions, onBack }) => {
             </header>
 
             <main className="flex-grow p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full">
-                {/* User Information Card - Added border */}
-                <div className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-300">
+                {/* User Information Card - removed rounded-lg */}
+                <div className="bg-white p-6 shadow-md mb-8 border border-gray-300">
                     <h2 className="text-xl font-semibold mb-4 text-gray-800">User Information</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
                         <div>
@@ -69,8 +67,8 @@ const UserDetailPage = ({ user, transactions, onBack }) => {
                     </div>
                 </div>
 
-                {/* Transaction Summary Card - Added border */}
-                <div className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-300">
+                {/* Transaction Summary Card - removed rounded-lg */}
+                <div className="bg-white p-6 shadow-md mb-8 border border-gray-300">
                     <h2 className="text-xl font-semibold mb-4 text-gray-800">Transaction Summary</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-gray-700">
                         <p><span className="font-medium">Total Transactions:</span> {totalTransactions}</p>
@@ -81,9 +79,9 @@ const UserDetailPage = ({ user, transactions, onBack }) => {
                     </div>
                 </div>
 
-                {/* Transaction Volume Chart - Added border */}
+                {/* Transaction Volume Chart - removed rounded-lg */}
                 {chartData.length > 0 && (
-                    <div className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-300">
+                    <div className="bg-white p-6 shadow-md mb-8 border border-gray-300">
                         <h2 className="text-xl font-semibold mb-4">Daily Transaction Volume</h2>
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
@@ -97,8 +95,8 @@ const UserDetailPage = ({ user, transactions, onBack }) => {
                     </div>
                 )}
 
-                {/* Detailed Transaction History Table - Added border */}
-                <div className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-300">
+                {/* Detailed Transaction History Table - removed rounded-lg */}
+                <div className="bg-white p-6 shadow-md mb-8 border border-gray-300">
                     <h2 className="text-xl font-semibold mb-4 text-gray-800">Detailed Transaction History</h2>
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200">

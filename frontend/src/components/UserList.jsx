@@ -1,11 +1,11 @@
-// frontend/src/components/UserList.jsx
-import React, { useState } from 'react';
+import React from 'react';
 import { calculateRiskScore } from '../utils/calculateRiskScore';
 
 const RiskBadge = ({ level }) => {
+    // Keep baseClasses as is, since rounding is for the badge itself, not the component container.
     const baseClasses = "px-2 py-1 text-xs font-semibold rounded-full";
     const styles = {
-        Low: "bg-green-200 text-green-800",
+        Low: "bg-gray-200 text-gray-800",
         Medium: "bg-yellow-200 text-yellow-800",
         High: "bg-red-200 text-red-800",
     };
@@ -13,45 +13,36 @@ const RiskBadge = ({ level }) => {
 };
 
 const UserList = ({ users = [], transactions = [], onUserClick }) => {
-    const [displayLimit, setDisplayLimit] = useState(10);
-    const usersPerPage = 10;
-
     const safeUsers = Array.isArray(users) ? users : [];
     const safeTransactions = Array.isArray(transactions) ? transactions : [];
 
     const usersWithRisk = safeUsers.map(user => {
-        const userId = Number(user.user_id);
+        const userIdStr = String(user.user_id).trim();
+
         const userTransactions = safeTransactions.filter(tx => {
-            if (tx.user_id === undefined || tx.user_id === null || isNaN(Number(tx.user_id))) {
-                return false;
-            }
-            return Number(tx.user_id) === userId;
+            if (!tx.user_id) return false;
+            return String(tx.user_id).trim() === userIdStr;
         });
 
-        const risk = calculateRiskScore(userTransactions, safeTransactions);
-        return { ...user, ...risk };
-    }).sort((a, b) => b.score - a.score);
-
-    const handleViewMore = () => {
-        setDisplayLimit(prevLimit => prevLimit + usersPerPage);
-    };
+        const { score, level } = calculateRiskScore(userTransactions, safeTransactions);
+        return { ...user, score: score, level: level };
+    });
 
     return (
-        // Added border to UserList component
-        <div className="bg-white p-6 rounded-lg shadow-md h-full flex flex-col border border-gray-300">
-            <h2 className="text-xl font-semibold mb-4">Users by Risk Score</h2>
-            <div className="flex-grow overflow-y-auto">
+        // Removed rounded-lg from the main container div
+        <div className="bg-white p-6 shadow-md border border-gray-300">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">Users Overview</h2>
+            <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Initial Balance</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risk Score</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {usersWithRisk.slice(0, displayLimit).map(user => (
+                        {usersWithRisk.map(user => (
                             <tr
                                 key={user.user_id}
                                 onClick={() => onUserClick && onUserClick(user)}
@@ -61,10 +52,7 @@ const UserList = ({ users = [], transactions = [], onUserClick }) => {
                                     <div className="text-sm font-medium text-gray-900">{user.name}</div>
                                     <div className="text-sm text-gray-500">{user.email}</div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    R{user.initial_balance ? user.initial_balance.toFixed(2) : 'N/A'}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">{user.score.toFixed(0)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">{user.score}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <RiskBadge level={user.level} />
                                 </td>
@@ -73,16 +61,6 @@ const UserList = ({ users = [], transactions = [], onUserClick }) => {
                     </tbody>
                 </table>
             </div>
-            {usersWithRisk.length > displayLimit && (
-                <div className="mt-4 text-center">
-                    <button
-                        onClick={handleViewMore}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    >
-                        View More Users
-                    </button>
-                </div>
-            )}
         </div>
     );
 };
