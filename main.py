@@ -33,7 +33,8 @@ app = FastAPI(title="FNB Fraud Detection API")
 # --- CORS Middleware ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    # ADDED 'http://localhost:5174' to the allowed origins
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -145,10 +146,9 @@ def read_transactions(user_id: Optional[int] = None):
 # --- Get Fraud Transactions ---
 @app.get("/fraud-transactions", response_model=List[Transaction])
 def read_fraud_transactions():
-    print("--- Fetching Fraud Transactions ---") # ADDED FOR DEBUGGING
+    print("--- Fetching Fraud Transactions ---")
     try:
         with engine.connect() as conn:
-            # Modified: Explicitly select columns and ensure correct filtering
             result = conn.execute(text("""
                 SELECT
                     transaction_id, user_id, timestamp, amount, type, channel, location, merchant,
@@ -161,7 +161,7 @@ def read_fraud_transactions():
             fraud_transactions_data = []
             for row in result:
                 txn_dict = row._asdict()
-                # print(f"  Processing transaction: {txn_dict.get('transaction_id')}, is_fraud: {txn_dict.get('is_fraud')}") # UNCOMMENT FOR MORE DETAILED DEBUGGING
+                # print(f"  Processing transaction: {txn_dict.get('transaction_id')}, is_fraud: {txn_dict.get('is_fraud')}")
                 if isinstance(txn_dict.get("timestamp"), (pd.Timestamp, date)):
                     txn_dict["timestamp"] = txn_dict["timestamp"].strftime("%Y-%m-%d %H:%M:%S")
                 
@@ -170,8 +170,8 @@ def read_fraud_transactions():
                     
                 fraud_transactions_data.append(txn_dict)
             
-            print(f"--- Found {len(fraud_transactions_data)} fraud transactions to return ---") # ADDED FOR DEBUGGING
+            print(f"--- Found {len(fraud_transactions_data)} fraud transactions to return ---")
             return fraud_transactions_data
     except Exception as e:
-        print(f"--- Error fetching fraud transactions: {str(e)} ---") # ADDED FOR DEBUGGING
+        print(f"--- Error fetching fraud transactions: {str(e)} ---")
         return {"error": f"Failed to fetch fraud transactions: {str(e)}"}

@@ -1,51 +1,51 @@
 user_id,name,email,account_type,province,signup_date,initial_balance
-1001,Allison Hill,allison.hill@email.co.za,Business,Eastern Cape,2023-06-19,66048.59
-1002,Brian Yang,brian.yang@webmail.co.za,Cheque,Gauteng,2024-11-01,23423.92
-1003,Javier Johnson,javier.johnson@webmail.co.za,Cheque,Eastern Cape,2023-06-12,95492.83
-1004,Lance Hoffman,lance.hoffman@webmail.co.za,Cheque,Limpopo,2025-04-12,47223.94
-1005,Jennifer Cole,jennifer.cole@webmail.co.za,Cheque,North West,2023-09-13,11411.58
-1006,Abigail Shaffer,abigail.shaffer@webmail.co.za,Cheque,KwaZulu-Natal,2025-06-26,16885.25
-1007,Donald Lewis,donald.lewis@webmail.co.za,Youth,Free State,2023-12-12,43376.93
-1008,James Howard,james.howard@webmail.co.za,Youth,Gauteng,2023-12-24,29214.27
-1009,Renee Blair,renee.blair@email.co.za,Cheque,Mpumalanga,2024-10-18,26804.37
-1010,Thomas Miller,thomas.miller@email.co.za,Youth,Mpumalanga,2023-10-06,54300.01
-1011,Lisa Hensley,lisa.hensley@email.co.za,Savings,Limpopo,2024-12-20,93247.5
-1012,Benjamin Stanley,benjamin.stanley@mail.co.za,Cheque,Free State,2023-09-30,51619.53
-1013,Dr. Sharon James,dr..sharon.james@email.co.za,Cheque,North West,2024-06-11,16719.46
-1014,Holly Wood,holly.wood@webmail.co.za,Cheque,Western Cape,2023-05-29,44848.96
-1015,Mia Sutton,mia.sutton@webmail.co.za,Cheque,Limpopo,2022-10-26,35421.24
-1016,Carolyn Daniel,carolyn.daniel@email.co.za,Cheque,Northern Cape,2023-03-18,30683.53
-1017,Devin Schaefer,devin.schaefer@email.co.za,Business,KwaZulu-Natal,2025-06-11,1024.23
-1018,Melinda Cameron,melinda.cameron@mail.co.za,Premier,North West,2022-10-02,45087.61
-1019,Andrew Stewart,andrew.stewart@email.co.za,Savings,Gauteng,2023-08-27,36711.54
-1020,Thomas Bradley,thomas.bradley@webmail.co.za,Cheque,Western Cape,2023-11-08,79186.37
-1021,Jonathan Wilkerson,jonathan.wilkerson@mail.co.za,Savings,KwaZulu-Natal,2025-04-01,82156.87
-1022,Derek Wright,derek.wright@email.co.za,Youth,Northern Cape,2024-11-26,59542.99
-1023,Nicole Patterson,nicole.patterson@webmail.co.za,Business,Northern Cape,2024-12-30,55116.72
-1024,Daniel Bright,daniel.bright@email.co.za,Cheque,Western Cape,2024-09-06,54913.09
-1025,Peter Callahan Jr.,peter.callahan.jr.@email.co.za,Business,Gauteng,2023-03-13,84528.29
-1026,Jennifer Brown,jennifer.brown@mail.co.za,Business,Mpumalanga,2024-02-20,22270.0
-1027,Julie King,julie.king@email.co.za,Premier,Free State,2024-11-13,93406.02
-1028,Alexandra Le,alexandra.le@email.co.za,Business,Gauteng,2025-06-01,12394.05
-1029,Nicole Mack,nicole.mack@webmail.co.za,Youth,Western Cape,2023-12-18,27620.16
-1030,Jeffrey Chavez,jeffrey.chavez@mail.co.za,Savings,North West,2023-08-21,47674.87
-1031,Pamela Romero,pamela.romero@webmail.co.za,Youth,Free State,2022-12-20,86942.45
-1032,Elizabeth Fowler,elizabeth.fowler@email.co.za,Business,Free State,2025-02-08,54617.33
-1033,James Martin,james.martin@webmail.co.za,Cheque,Free State,2024-10-08,78472.86
-1034,Linda Burns,linda.burns@webmail.co.za,Business,Northern Cape,2022-12-28,34602.22
-1035,Sherry Decker,sherry.decker@mail.co.za,Savings,Northern Cape,2023-10-28,94941.28
-1036,David Bradley,david.bradley@email.co.za,Savings,Mpumalanga,2022-11-07,29781.73
-1037,John Jones,john.jones@mail.co.za,Business,Western Cape,2024-10-12,10589.65
-1038,Betty Alvarez,betty.alvarez@webmail.co.za,Cheque,KwaZulu-Natal,2024-11-08,86984.55
-1039,Joseph Obrien,joseph.obrien@webmail.co.za,Business,Western Cape,2023-06-02,58936.5
-1040,Nicole Vaughn,nicole.vaughn@webmail.co.za,Business,Free State,2023-11-04,79462.36
-1041,Michael Brooks,michael.brooks@webmail.co.za,Cheque,Northern Cape,2024-09-19,40537.81
-1042,David Brown,david.brown@mail.co.za,Premier,Eastern Cape,2022-08-09,51222.16
-1043,Crystal Robinson,crystal.robinson@email.co.za,Business,Gauteng,2022-10-26,50926.03
-1044,Amy Jones,amy.jones@mail.co.za,Cheque,Northern Cape,2022-08-25,15884.27
-1045,Andrea Young,andrea.young@webmail.co.za,Savings,KwaZulu-Natal,2025-05-12,22207.98
-1046,Mr. Nathaniel Khan,mr..nathaniel.khan@mail.co.za,Business,KwaZulu-Natal,2024-12-19,35864.35
-1047,Richard Aguirre,richard.aguirre@webmail.co.za,Premier,Northern Cape,2023-04-29,63777.25
-1048,Matthew Gomez,matthew.gomez@webmail.co.za,Savings,Free State,2024-04-06,98038.96
-1049,Nicholas Nunez,nicholas.nunez@mail.co.za,Youth,Gauteng,2025-04-06,49638.18
-1050,James Morgan,james.morgan@webmail.co.za,Business,Gauteng,2022-12-24,70094.04
+1001,Allison Hill,allison.hill@email.co.za,Youth,Limpopo,2023-06-19,93125.26
+1002,Brian Yang,brian.yang@webmail.co.za,Savings,Mpumalanga,2024-11-01,89263.02
+1003,Javier Johnson,javier.johnson@email.co.za,Savings,Western Cape,2023-06-12,16718.53
+1004,Lance Hoffman,lance.hoffman@mail.co.za,Business,Mpumalanga,2025-04-12,96746.6
+1005,Jennifer Cole,jennifer.cole@mail.co.za,Cheque,North West,2023-09-13,68968.23
+1006,Abigail Shaffer,abigail.shaffer@mail.co.za,Premier,Mpumalanga,2025-06-26,28406.28
+1007,Donald Lewis,donald.lewis@mail.co.za,Savings,Eastern Cape,2023-12-12,7513.15
+1008,James Howard,james.howard@webmail.co.za,Savings,Eastern Cape,2023-12-24,61933.65
+1009,Renee Blair,renee.blair@email.co.za,Savings,Free State,2024-10-18,15392.88
+1010,Thomas Miller,thomas.miller@mail.co.za,Premier,KwaZulu-Natal,2023-10-06,23682.26
+1011,Lisa Hensley,lisa.hensley@webmail.co.za,Cheque,Northern Cape,2024-12-20,18651.29
+1012,Benjamin Stanley,benjamin.stanley@mail.co.za,Youth,Northern Cape,2023-09-30,35176.66
+1013,Dr. Sharon James,dr..sharon.james@webmail.co.za,Savings,Northern Cape,2024-06-11,24962.07
+1014,Holly Wood,holly.wood@email.co.za,Youth,Eastern Cape,2023-05-29,35956.15
+1015,Mia Sutton,mia.sutton@mail.co.za,Savings,Eastern Cape,2022-10-26,30657.36
+1016,Carolyn Daniel,carolyn.daniel@mail.co.za,Premier,Eastern Cape,2023-03-18,52664.96
+1017,Devin Schaefer,devin.schaefer@webmail.co.za,Cheque,North West,2025-06-11,42382.36
+1018,Melinda Cameron,melinda.cameron@mail.co.za,Premier,Limpopo,2022-10-02,78763.47
+1019,Andrew Stewart,andrew.stewart@mail.co.za,Premier,Limpopo,2023-08-27,25052.76
+1020,Thomas Bradley,thomas.bradley@webmail.co.za,Youth,Free State,2023-11-08,85444.5
+1021,Jonathan Wilkerson,jonathan.wilkerson@webmail.co.za,Premier,KwaZulu-Natal,2025-04-01,24486.51
+1022,Derek Wright,derek.wright@email.co.za,Youth,Mpumalanga,2024-11-26,82285.07
+1023,Nicole Patterson,nicole.patterson@webmail.co.za,Business,Gauteng,2024-12-30,23052.18
+1024,Daniel Bright,daniel.bright@mail.co.za,Savings,Eastern Cape,2024-09-06,83835.24
+1025,Peter Callahan Jr.,peter.callahan.jr.@webmail.co.za,Savings,KwaZulu-Natal,2023-03-13,57181.55
+1026,Jennifer Brown,jennifer.brown@webmail.co.za,Business,Western Cape,2024-02-20,62711.8
+1027,Julie King,julie.king@mail.co.za,Savings,Western Cape,2024-11-13,30991.33
+1028,Alexandra Le,alexandra.le@email.co.za,Youth,Mpumalanga,2025-06-01,53597.81
+1029,Nicole Mack,nicole.mack@mail.co.za,Premier,Limpopo,2023-12-18,90951.79
+1030,Jeffrey Chavez,jeffrey.chavez@webmail.co.za,Premier,Free State,2023-08-21,30319.39
+1031,Pamela Romero,pamela.romero@email.co.za,Premier,Limpopo,2022-12-20,45796.67
+1032,Elizabeth Fowler,elizabeth.fowler@webmail.co.za,Cheque,Northern Cape,2025-02-08,82281.25
+1033,James Martin,james.martin@webmail.co.za,Savings,Eastern Cape,2024-10-08,55751.84
+1034,Linda Burns,linda.burns@mail.co.za,Youth,Free State,2022-12-28,15142.27
+1035,Sherry Decker,sherry.decker@email.co.za,Cheque,Limpopo,2023-10-28,71357.41
+1036,David Bradley,david.bradley@email.co.za,Business,KwaZulu-Natal,2022-11-07,49765.39
+1037,John Jones,john.jones@mail.co.za,Savings,Gauteng,2024-10-12,85649.37
+1038,Betty Alvarez,betty.alvarez@webmail.co.za,Business,Free State,2024-11-08,43368.87
+1039,Joseph Obrien,joseph.obrien@mail.co.za,Cheque,KwaZulu-Natal,2023-06-02,44340.41
+1040,Nicole Vaughn,nicole.vaughn@webmail.co.za,Premier,Western Cape,2023-11-04,54815.26
+1041,Michael Brooks,michael.brooks@email.co.za,Youth,Mpumalanga,2024-09-19,1208.51
+1042,David Brown,david.brown@webmail.co.za,Savings,Northern Cape,2022-08-09,86401.07
+1043,Crystal Robinson,crystal.robinson@email.co.za,Business,North West,2022-10-26,70703.54
+1044,Amy Jones,amy.jones@mail.co.za,Premier,KwaZulu-Natal,2022-08-25,60617.53
+1045,Andrea Young,andrea.young@mail.co.za,Cheque,Western Cape,2025-05-12,56936.78
+1046,Mr. Nathaniel Khan,mr..nathaniel.khan@email.co.za,Cheque,KwaZulu-Natal,2024-12-19,4444.57
+1047,Richard Aguirre,richard.aguirre@mail.co.za,Cheque,Eastern Cape,2023-04-29,28438.39
+1048,Matthew Gomez,matthew.gomez@mail.co.za,Premier,Limpopo,2024-04-06,54831.82
+1049,Nicholas Nunez,nicholas.nunez@mail.co.za,Business,Northern Cape,2025-04-06,92695.85
+1050,James Morgan,james.morgan@email.co.za,Cheque,Mpumalanga,2022-12-24,99959.01

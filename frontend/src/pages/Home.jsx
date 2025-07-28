@@ -1,4 +1,3 @@
-// frontend/src/pages/Home.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -6,8 +5,7 @@ import StatsCard from '../components/StatsCard';
 import UserList from '../components/UserList';
 import FraudTransactionsList from '../components/FraudTransactionsList';
 import TransactionFilters from '../components/TransactionFilters';
-// import DetailModal from '../components/DetailModal'; // REMOVED: No longer a modal
-import InProjectReadme from '../components/InProjectReadme';
+import DetailModal from '../components/DetailModal';
 
 // Add these imports for the charts
 import FraudTrendChart from '../components/FraudTrendChart';
@@ -17,14 +15,13 @@ import TransactionChart from '../components/TransactionChart';
 const fetchUsers = () => fetch('http://127.0.0.1:8000/users').then(res => res.json());
 const fetchTransactions = () => fetch('http://127.0.0.1:8000/transactions').then(res => res.json());
 
-// Home component now accepts navigateToUserDetail prop from App.jsx
-const Home = ({ navigateToUserDetail }) => {
+const Home = () => {
     const [users, setUsers] = useState([]);
     const [transactions, setTransactions] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [lastUpdated, setLastUpdated] = useState(null);
-    // const [modalData, setModalData] = useState(null); // REMOVED: No longer using modalData
+    const [modalData, setModalData] = useState(null);
     const [filters, setFilters] = useState({
         dateFrom: '',
         dateTo: '',
@@ -35,21 +32,28 @@ const Home = ({ navigateToUserDetail }) => {
     const fetchData = useCallback(async () => {
         setIsRefreshing(true);
         try {
-            const [usersData, transactionsData] = await Promise.all([fetchUsers(), fetchTransactions()]);
+            const [usersData, transactionsData] = await Promise.all([
+                fetchUsers(),
+                fetchTransactions(),
+            ]);
 
-            // Normalize user_id types to Number for consistency
-            const normUsers = usersData.map(u => ({ ...u, user_id: Number(u.user_id) }));
-            const normTransactions = transactionsData.map(tx => ({ ...tx, user_id: Number(tx.user_id) }));
+            // Ensure is_fraud is a number for calculations
+            const processedTransactions = transactionsData.map(tx => ({
+                ...tx,
+                is_fraud: Number(tx.is_fraud),
+                amount: parseFloat(tx.amount),
+                balance_before_txn: parseFloat(tx.balance_before_txn),
+                balance_after_txn: parseFloat(tx.balance_after_txn),
+                fraud_score: parseFloat(tx.fraud_score) // Ensure fraud_score is a number
+            }));
 
-            setUsers(normUsers);
-            setTransactions(normTransactions);
-            setFilteredTransactions(normTransactions); // Initially show all
+            setUsers(usersData);
+            setTransactions(processedTransactions);
+            setFilteredTransactions(processedTransactions); // Initialize filtered with all transactions
             setLastUpdated(new Date());
-
-            console.log("Fetched users:", normUsers);
-            console.log("Fetched transactions:", normTransactions);
+            console.log('📦 Fetched data:', { users: usersData.length, transactions: processedTransactions.length });
         } catch (error) {
-            console.error("Failed to fetch data:", error);
+            console.error('Failed to fetch data:', error);
         } finally {
             setIsRefreshing(false);
         }
@@ -57,94 +61,96 @@ const Home = ({ navigateToUserDetail }) => {
 
     useEffect(() => {
         fetchData();
-        const intervalId = setInterval(fetchData, 60000); // Refresh every minute
-        return () => clearInterval(intervalId);
+        // Set up interval to refresh data every 30 seconds
+        const intervalId = setInterval(fetchData, 30000);
+        return () => clearInterval(intervalId); // Clean up on unmount
     }, [fetchData]);
 
+    // Apply filters
     useEffect(() => {
-        let result = transactions;
+        let tempTransactions = transactions;
+
         if (filters.dateFrom) {
-            result = result.filter(tx => new Date(tx.timestamp) >= new Date(filters.dateFrom));
+            const fromDate = new Date(filters.dateFrom);
+            tempTransactions = tempTransactions.filter(tx => new Date(tx.timestamp) >= fromDate);
         }
         if (filters.dateTo) {
-            result = result.filter(tx => new Date(tx.timestamp) <= new Date(filters.dateTo));
+            const toDate = new Date(filters.dateTo);
+            tempTransactions = tempTransactions.filter(tx => new Date(tx.timestamp) <= toDate);
         }
         if (filters.minAmount) {
-            result = result.filter(tx => parseFloat(tx.amount) >= parseFloat(filters.minAmount));
+            const minAmount = parseFloat(filters.minAmount);
+            tempTransactions = tempTransactions.filter(tx => tx.amount >= minAmount);
         }
         if (filters.maxAmount) {
-            result = result.filter(tx => parseFloat(tx.amount) <= parseFloat(filters.maxAmount));
+            const maxAmount = parseFloat(filters.maxAmount);
+            tempTransactions = tempTransactions.filter(tx => tx.amount <= maxAmount);
         }
-        setFilteredTransactions(result);
-    }, [filters, transactions]);
+        setFilteredTransactions(tempTransactions);
+    }, [transactions, filters]);
 
-    const handleFilterChange = (newFilters) => {
-        setFilters(prev => ({ ...prev, ...newFilters }));
-    };
 
-    // Modified handleUserClick to navigate to the full page detail view
     const handleUserClick = (user) => {
-        console.log("Clicked user:", user);
-        const userId = Number(user.user_id); // normalize
-
-        const userTransactions = transactions.filter(tx => {
-            return Number(tx.user_id) === userId;
-        });
-
-        console.log(`User ${userId} transactions count:`, userTransactions.length);
-        // Call the navigation function passed from App.jsx
-        navigateToUserDetail(user, userTransactions);
+        // Filter transactions for the clicked user
+        const userTransactions = transactions.filter(tx => tx.user_id === user.user_id);
+        setModalData({ user, transactions: userTransactions });
     };
 
-    // const closeModal = () => setModalData(null); // REMOVED: No longer needed
+    const closeModal = () => {
+        setModalData(null);
+    };
 
-    const fraudulentTxns = filteredTransactions.filter(t => t.is_fraud).length;
-    const totalTxns = filteredTransactions.length;
-    const fraudRate = totalTxns > 0 ? ((fraudulentTxns / totalTxns) * 100).toFixed(2) + '%' : '0%';
+    // Calculate overall stats
+    const totalTransactions = filteredTransactions.length;
+    const fraudulentTxns = filteredTransactions.filter(tx => Number(tx.is_fraud) === 1).length;
+    const fraudRate = totalTransactions > 0 ? ((fraudulentTxns / totalTransactions) * 100).toFixed(2) + '%' : '0.00%';
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <Header />
-            <main className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
-                <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-3xl font-bold tracking-tight">Fraud Dashboard</h1>
-                    {lastUpdated && <p className="text-sm text-gray-500">Last updated: {lastUpdated.toLocaleTimeString()}</p>}
-                </div>
+        // Changed bg-gray-50 to bg-white for the entire page background
+        <div className="min-h-screen bg-white flex flex-col">
+            <Header
+                lastUpdated={lastUpdated}
+                isRefreshing={isRefreshing}
+                onRefresh={fetchData}
+            />
+            <main className="flex-grow p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full">
+                <TransactionFilters filters={filters} setFilters={setFilters} />
 
-                <TransactionFilters onFilterChange={handleFilterChange} onRefresh={fetchData} isRefreshing={isRefreshing} />
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {/* Stats Cards Section */}
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+                    {/* StatsCard components will get their border styling internally */}
                     <StatsCard title="Total Users" value={users.length} />
-                    <StatsCard title="Visible Transactions" value={totalTxns} />
+                    <StatsCard title="Total Transactions" value={totalTransactions} />
                     <StatsCard title="Fraudulent Transactions" value={fraudulentTxns} />
                     <StatsCard title="Fraud Rate" value={fraudRate} />
                 </div>
 
                 {/* Charts Section */}
+                {/* Added border to chart containers */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                    <div className="bg-white p-6 rounded-lg shadow-md">
+                    <div className="bg-white p-6 rounded-lg shadow-md border border-gray-300">
                         <h2 className="text-xl font-semibold mb-4">Monthly Transaction Volume</h2>
                         <TransactionChart data={filteredTransactions} />
                     </div>
-                    <div className="bg-white p-6 rounded-lg shadow-md">
+                    <div className="bg-white p-6 rounded-lg shadow-md border border-gray-300">
                         <h2 className="text-xl font-semibold mb-4">Weekly Fraud Trend</h2>
                         <FraudTrendChart data={filteredTransactions.filter(tx => tx.is_fraud)} />
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
+                <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                     <div className="xl:col-span-1">
-                        {/* Pass navigateToUserDetail down to UserList */}
+                        {/* UserList component will get its border styling internally */}
                         <UserList users={users} transactions={transactions} onUserClick={handleUserClick} />
                     </div>
-                    <div className="xl:col-span-2 flex flex-col gap-8">
+                    <div className="xl:col-span-2">
+                        {/* FraudTransactionsList component will get its border styling internally */}
                         <FraudTransactionsList transactions={filteredTransactions.filter(tx => tx.is_fraud)} />
-                        <InProjectReadme />
                     </div>
                 </div>
             </main>
             <Footer />
-            {/* <DetailModal isOpen={!!modalData} onClose={closeModal} data={modalData} /> */} {/* REMOVED */}
+            <DetailModal isOpen={!!modalData} onClose={closeModal} data={modalData} />
         </div>
     );
 };

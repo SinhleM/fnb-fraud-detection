@@ -1,11 +1,11 @@
-// frontend/src/pages/UserDetailPage.jsx
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const UserDetailPage = ({ user, transactions, onBack }) => {
     if (!user || !transactions) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            // Changed bg-gray-50 to bg-white for the entire page background
+            <div className="min-h-screen bg-white flex items-center justify-center">
                 <p className="text-gray-600">No user data to display. Please go back to the dashboard.</p>
                 <button onClick={onBack} className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
                     Back to Dashboard
@@ -16,16 +16,15 @@ const UserDetailPage = ({ user, transactions, onBack }) => {
 
     // --- User Summary Calculations ---
     const totalTransactions = transactions.length;
-    const fraudulentTransactions = transactions.filter(tx => Number(tx.is_fraud) === 1);
-    const numFraudulent = fraudulentTransactions.length;
+    const fraudulentTxns = transactions.filter(tx => Number(tx.is_fraud) === 1);
+    const numFraudulent = fraudulentTxns.length;
     const totalAmountTransacted = transactions.reduce((sum, tx) => sum + tx.amount, 0);
-    const totalFraudulentAmount = fraudulentTransactions.reduce((sum, tx) => sum + tx.amount, 0);
+    const totalFraudulentAmount = fraudulentTxns.reduce((sum, tx) => sum + tx.amount, 0);
     const averageTransactionAmount = totalTransactions > 0 ? totalAmountTransacted / totalTransactions : 0;
 
     // --- Chart Data Preparation ---
-    // Group transactions by date for a simple time-series chart
     const dailyTransactionVolume = transactions.reduce((acc, tx) => {
-        const date = new Date(tx.timestamp).toLocaleDateString('en-CA'); // YYYY-MM-DD for consistent sorting
+        const date = new Date(tx.timestamp).toLocaleDateString('en-CA');
         acc[date] = (acc[date] || 0) + tx.amount;
         return acc;
     }, {});
@@ -36,7 +35,8 @@ const UserDetailPage = ({ user, transactions, onBack }) => {
     }));
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        // Changed bg-gray-50 to bg-white for the entire page background
+        <div className="min-h-screen bg-white flex flex-col">
             <header className="bg-white shadow-sm p-4 sm:p-6 md:p-8 flex items-center justify-between">
                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
                     <button onClick={onBack} className="text-blue-500 hover:text-blue-700 mr-4">
@@ -50,8 +50,8 @@ const UserDetailPage = ({ user, transactions, onBack }) => {
             </header>
 
             <main className="flex-grow p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full">
-                {/* User Information Card */}
-                <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+                {/* User Information Card - Added border */}
+                <div className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-300">
                     <h2 className="text-xl font-semibold mb-4 text-gray-800">User Information</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
                         <div>
@@ -69,8 +69,8 @@ const UserDetailPage = ({ user, transactions, onBack }) => {
                     </div>
                 </div>
 
-                {/* Transaction Summary Card */}
-                <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+                {/* Transaction Summary Card - Added border */}
+                <div className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-300">
                     <h2 className="text-xl font-semibold mb-4 text-gray-800">Transaction Summary</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-gray-700">
                         <p><span className="font-medium">Total Transactions:</span> {totalTransactions}</p>
@@ -81,9 +81,9 @@ const UserDetailPage = ({ user, transactions, onBack }) => {
                     </div>
                 </div>
 
-                {/* Transaction Volume Chart */}
+                {/* Transaction Volume Chart - Added border */}
                 {chartData.length > 0 && (
-                    <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+                    <div className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-300">
                         <h2 className="text-xl font-semibold mb-4">Daily Transaction Volume</h2>
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
@@ -97,13 +97,12 @@ const UserDetailPage = ({ user, transactions, onBack }) => {
                     </div>
                 )}
 
-                {/* Detailed Transaction History Table */}
-                <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+                {/* Detailed Transaction History Table - Added border */}
+                <div className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-300">
                     <h2 className="text-xl font-semibold mb-4 text-gray-800">Detailed Transaction History</h2>
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
-                                {/* Adjusted formatting for <tr> and <th> tags */}
                                 <tr>
                                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Merchant</th>
@@ -121,7 +120,6 @@ const UserDetailPage = ({ user, transactions, onBack }) => {
                             <tbody className="bg-white divide-y divide-gray-200">
                                 {transactions.length > 0 ? (
                                     transactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).map(txn => (
-                                        // Adjusted formatting for <tr> and <td> tags
                                         <tr key={txn.transaction_id} className={Number(txn.is_fraud) === 1 ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-50'}>
                                             <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
                                                 {new Date(txn.timestamp).toLocaleDateString()}
