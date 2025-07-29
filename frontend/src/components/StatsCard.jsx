@@ -1,13 +1,12 @@
 import React from 'react';
 
 const StatsCard = ({ title, value }) => {
-    return (
-        // Added border to StatsCard
-        <div className="bg-white p-6 shadow-md border border-gray-300">
-            <h3 className="text-lg font-medium text-gray-500 truncate">{title}</h3>
-            <p className="mt-1 text-3xl font-semibold text-gray-900">{value}</p>
-        </div>
-    );
+  return (
+    <div className="bg-white p-5 shadow-sm rounded border border-gray-200">
+      <h3 className="text-md font-medium text-gray-800 truncate">{title}</h3>
+      <p className="mt-1 text-3xl font-semibold text-gray-800">{value}</p>
+    </div>
+  );
 };
 
 export default StatsCard;

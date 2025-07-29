@@ -2,20 +2,36 @@ import React from 'react';
 
 const Header = () => {
     return (
-        <header className="bg-black shadow-md">
+        <header className="bg-white border-b border-gray-200 shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
+                    {/* Logo / Title */}
                     <div className="flex-shrink-0">
-                        <h1 className="text-2xl font-bold text-white">
-                            FNB <span className="text-gray-400">Fraud Detection</span>
+                        <h1 className="text-xl font-semibold text-gray-900">
+                            FNB <span className="text-gray-800">Fraud Detection</span> {/* Green branding hint */}
                         </h1>
                     </div>
-                    <nav className="hidden md:block">
-                        <div className="ml-10 flex items-baseline space-x-4">
-                            <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-                            <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Reports</a>
-                            <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Settings</a>
-                        </div>
+
+                    {/* Minimalist Nav */}
+                    <nav className="hidden md:flex space-x-6">
+                        <a 
+                            href="#" 
+                            className="text-sm text-gray-600 hover:text-teal-600 transition-colors duration-200" // subtle green hint
+                        >
+                            Dashboard
+                        </a>
+                        <a 
+                            href="#" 
+                            className="text-sm text-gray-600 hover:text-teal-600 transition-colors duration-200"
+                        >
+                            Reports
+                        </a>
+                        <a 
+                            href="#" 
+                            className="text-sm text-gray-600 hover:text-teal-600 transition-colors duration-200"
+                        >
+                            Settings
+                        </a>
                     </nav>
                 </div>
             </div>
