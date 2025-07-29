@@ -6,157 +6,185 @@ import UserList from '../components/UserList';
 import FraudTransactionsList from '../components/FraudTransactionsList';
 import TransactionFilters from '../components/TransactionFilters';
 import UserDetailPage from './UserDetailPage';
-
 import FraudTrendChart from '../components/FraudTrendChart';
 import TransactionChart from '../components/TransactionChart';
 
 // API fetching functions
-const fetchUsers = () => fetch('http://127.0.0.1:8000/users').then(res => res.json());
-const fetchTransactions = () => fetch('http://127.0.0.1:8000/transactions').then(res => res.json());
+const fetchUsers = () =>
+  fetch('http://127.0.0.1:8000/users').then(res => res.json());
+
+const fetchTransactions = () =>
+  fetch('http://127.0.0.1:8000/transactions').then(res => res.json());
 
 const Home = () => {
-    const [users, setUsers] = useState([]);
-    const [transactions, setTransactions] = useState([]);
-    const [filteredTransactions, setFilteredTransactions] = useState([]);
-    const [isRefreshing, setIsRefreshing] = useState(false);
-    const [lastUpdated, setLastUpdated] = useState(null);
-    const [selectedUserData, setSelectedUserData] = useState(null);
-    const [filters, setFilters] = useState({
-        dateFrom: '',
-        dateTo: '',
-        minAmount: '',
-        maxAmount: '',
-    });
+  const [users, setUsers] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
+  const [selectedUserData, setSelectedUserData] = useState(null);
 
-    const fetchData = useCallback(async () => {
-        setIsRefreshing(true);
-        try {
-            const [usersData, transactionsData] = await Promise.all([
-                fetchUsers(),
-                fetchTransactions(),
-            ]);
+  const [filters, setFilters] = useState({
+    dateFrom: '',
+    dateTo: '',
+    minAmount: '',
+    maxAmount: '',
+  });
 
-            const processedTransactions = transactionsData.map(tx => ({
-                ...tx,
-                is_fraud: Number(tx.is_fraud),
-                amount: parseFloat(tx.amount),
-                balance_before_txn: parseFloat(tx.balance_before_txn),
-                balance_after_txn: parseFloat(tx.balance_after_txn),
-                fraud_score: parseFloat(tx.fraud_score)
-            }));
+  const fetchData = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      const [usersData, transactionsData] = await Promise.all([
+        fetchUsers(),
+        fetchTransactions(),
+      ]);
 
-            setUsers(usersData);
-            setTransactions(processedTransactions);
-            setFilteredTransactions(processedTransactions);
-            setLastUpdated(new Date());
-            console.log('📦 Fetched data:', { users: usersData.length, transactions: processedTransactions.length });
-        } catch (error) {
-            console.error('Failed to fetch data:', error);
-        } finally {
-            setIsRefreshing(false);
-        }
-    }, []);
+      const processedTransactions = transactionsData.map(tx => ({
+        ...tx,
+        is_fraud: Number(tx.is_fraud),
+        amount: parseFloat(tx.amount),
+        balance_before_txn: parseFloat(tx.balance_before_txn),
+        balance_after_txn: parseFloat(tx.balance_after_txn),
+        fraud_score: parseFloat(tx.fraud_score),
+      }));
 
-    useEffect(() => {
-        fetchData();
-        const intervalId = setInterval(fetchData, 30000);
-        return () => clearInterval(intervalId);
-    }, [fetchData]);
+      setUsers(usersData);
+      setTransactions(processedTransactions);
+      setFilteredTransactions(processedTransactions);
+      setLastUpdated(new Date());
 
-    useEffect(() => {
-        let tempTransactions = transactions;
+      console.log('📦 Fetched data:', {
+        users: usersData.length,
+        transactions: processedTransactions.length,
+      });
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, []);
 
-        if (filters.dateFrom) {
-            const fromDate = new Date(filters.dateFrom);
-            tempTransactions = tempTransactions.filter(tx => new Date(tx.timestamp) >= fromDate);
-        }
-        if (filters.dateTo) {
-            const toDate = new Date(filters.dateTo);
-            tempTransactions = tempTransactions.filter(tx => new Date(tx.timestamp) <= toDate);
-        }
-        if (filters.minAmount) {
-            const minAmount = parseFloat(filters.minAmount);
-            tempTransactions = tempTransactions.filter(tx => tx.amount >= minAmount);
-        }
-        if (filters.maxAmount) {
-            const maxAmount = parseFloat(filters.maxAmount);
-            tempTransactions = tempTransactions.filter(tx => tx.amount <= maxAmount);
-        }
-        setFilteredTransactions(tempTransactions);
-    }, [transactions, filters]);
+  useEffect(() => {
+    fetchData();
+    const intervalId = setInterval(fetchData, 30000);
+    return () => clearInterval(intervalId);
+  }, [fetchData]);
 
+  useEffect(() => {
+    let tempTransactions = transactions;
 
-    const handleUserClick = (user) => {
-        const userTransactions = transactions.filter(tx => tx.user_id === user.user_id);
-        setSelectedUserData({ user, transactions: userTransactions });
-    };
-
-    const handleBackToDashboard = () => {
-        setSelectedUserData(null);
-    };
-
-    const totalTransactions = filteredTransactions.length;
-    const fraudulentTxns = filteredTransactions.filter(tx => Number(tx.is_fraud) === 1).length;
-    const fraudRate = totalTransactions > 0 ? ((fraudulentTxns / totalTransactions) * 100).toFixed(2) + '%' : '0.00%';
-
-    if (selectedUserData) {
-        return (
-            <UserDetailPage
-                user={selectedUserData.user}
-                transactions={selectedUserData.transactions}
-                onBack={handleBackToDashboard}
-            />
-        );
+    if (filters.dateFrom) {
+      const fromDate = new Date(filters.dateFrom);
+      tempTransactions = tempTransactions.filter(
+        tx => new Date(tx.timestamp) >= fromDate
+      );
     }
 
-    return (
-        <div className="min-h-screen bg-white flex flex-col">
-            <Header
-                lastUpdated={lastUpdated}
-                isRefreshing={isRefreshing}
-                onRefresh={fetchData}
-            />
-            {/* Removed all padding (p-x classes) from the main element */}
-            <main className="flex-grow max-w-7xl mx-auto w-full">
-                {/* TransactionFilters - Note: This component itself still has an mb-8 in its own file if not updated */}
-                <TransactionFilters filters={filters} setFilters={setFilters} />
+    if (filters.dateTo) {
+      const toDate = new Date(filters.dateTo);
+      tempTransactions = tempTransactions.filter(
+        tx => new Date(tx.timestamp) <= toDate
+      );
+    }
 
-                {/* Stats Cards Section - mb-8 removed */}
-                {/* Changed gap-8 to gap-0 for explicit no gap between columns */}
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-0">
-                    <StatsCard title="Total Users" value={users.length} />
-                    <StatsCard title="Total Transactions" value={totalTransactions} />
-                    <StatsCard title="Fraudulent Transactions" value={fraudulentTxns} />
-                    <StatsCard title="Fraud Rate" value={fraudRate} />
-                </div>
+    if (filters.minAmount) {
+      const minAmount = parseFloat(filters.minAmount);
+      tempTransactions = tempTransactions.filter(tx => tx.amount >= minAmount);
+    }
 
-                {/* Charts Section - mb-8 removed */}
-                {/* Changed gap-8 to gap-0 for explicit no gap between columns */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-                    <div className="bg-white p-6 shadow-md border border-gray-300">
-                        <h2 className="text-xl font-semibold mb-4">Monthly Transaction Volume</h2>
-                        <TransactionChart data={filteredTransactions} />
-                    </div>
-                    <div className="bg-white p-6 shadow-md border border-gray-300">
-                        <h2 className="text-xl font-semibold mb-4">Weekly Fraud Trend</h2>
-                        <FraudTrendChart data={filteredTransactions.filter(tx => tx.is_fraud)} />
-                    </div>
-                </div>
+    if (filters.maxAmount) {
+      const maxAmount = parseFloat(filters.maxAmount);
+      tempTransactions = tempTransactions.filter(tx => tx.amount <= maxAmount);
+    }
 
-                {/* UserList and FraudTransactionsList section - no gap/margin classes */}
-                {/* Changed gap-8 to gap-0 for explicit no gap between columns */}
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-0">
-                    <div className="xl:col-span-1">
-                        <UserList users={users} transactions={transactions} onUserClick={handleUserClick} />
-                    </div>
-                    <div className="xl:col-span-2">
-                        <FraudTransactionsList transactions={filteredTransactions.filter(tx => tx.is_fraud)} />
-                    </div>
-                </div>
-            </main>
-            <Footer />
-        </div>
+    setFilteredTransactions(tempTransactions);
+  }, [transactions, filters]);
+
+  const handleUserClick = user => {
+    const userTransactions = transactions.filter(
+      tx => tx.user_id === user.user_id
     );
+    setSelectedUserData({ user, transactions: userTransactions });
+  };
+
+  const handleBackToDashboard = () => {
+    setSelectedUserData(null);
+  };
+
+  const totalTransactions = filteredTransactions.length;
+  const fraudulentTxns = filteredTransactions.filter(
+    tx => Number(tx.is_fraud) === 1
+  ).length;
+
+  const fraudRate =
+    totalTransactions > 0
+      ? ((fraudulentTxns / totalTransactions) * 100).toFixed(2) + '%'
+      : '0.00%';
+
+  if (selectedUserData) {
+    return (
+      <UserDetailPage
+        user={selectedUserData.user}
+        transactions={selectedUserData.transactions}
+        onBack={handleBackToDashboard}
+      />
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col">
+      <Header
+        lastUpdated={lastUpdated}
+        isRefreshing={isRefreshing}
+        onRefresh={fetchData}
+      />
+
+      <main className="flex-grow w-full">
+        <TransactionFilters filters={filters} setFilters={setFilters} />
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-0">
+          <StatsCard title="Total Users" value={users.length} />
+          <StatsCard title="Total Transactions" value={totalTransactions} />
+          <StatsCard title="Fraudulent Transactions" value={fraudulentTxns} />
+          <StatsCard title="Fraud Rate" value={fraudRate} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+          <div className="bg-white p-6 shadow-md border border-gray-300">
+            <h2 className="text-xl font-semibold mb-4">
+              Monthly Transaction Volume
+            </h2>
+            <TransactionChart data={filteredTransactions} />
+          </div>
+          <div className="bg-white p-6 shadow-md border border-gray-300">
+            <h2 className="text-xl font-semibold mb-4">
+              Weekly Fraud Trend
+            </h2>
+            <FraudTrendChart
+              data={filteredTransactions.filter(tx => tx.is_fraud)}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-0">
+          <div className="xl:col-span-1">
+            <UserList
+              users={users}
+              transactions={transactions}
+              onUserClick={handleUserClick}
+            />
+          </div>
+          <div className="xl:col-span-2">
+            <FraudTransactionsList
+              transactions={filteredTransactions.filter(tx => tx.is_fraud)}
+            />
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
 };
 
 export default Home;
