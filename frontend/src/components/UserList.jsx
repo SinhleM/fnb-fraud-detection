@@ -26,8 +26,11 @@ const UserList = ({ users = [], transactions = [], onUserClick }) => {
         return { ...user, score, level };
     });
 
-    const displayedUsers = usersWithRisk.slice(0, visibleUserCount);
-    const hasMoreUsers = usersWithRisk.length > visibleUserCount;
+    // Sort usersWithRisk by score from highest to lowest
+    const sortedUsersWithRisk = [...usersWithRisk].sort((a, b) => b.score - a.score); // MODIFIED LINE
+
+    const displayedUsers = sortedUsersWithRisk.slice(0, visibleUserCount); // MODIFIED LINE
+    const hasMoreUsers = sortedUsersWithRisk.length > visibleUserCount; // MODIFIED LINE
 
     return (
         <div className="bg-white p-4 border border-gray-200 flex flex-col flex-1 overflow-hidden">
@@ -68,14 +71,15 @@ const UserList = ({ users = [], transactions = [], onUserClick }) => {
                 </table>
             </div>
 
-            {usersWithRisk.length > USERS_PER_LOAD && (
+            {/* Change condition to use sortedUsersWithRisk.length */}
+            {sortedUsersWithRisk.length > USERS_PER_LOAD && (
                 <div className="mt-4 text-center">
                     {hasMoreUsers ? (
                         <button
-                            onClick={() => setVisibleUserCount(prev => Math.min(prev + USERS_PER_LOAD, usersWithRisk.length))}
+                            onClick={() => setVisibleUserCount(prev => Math.min(prev + USERS_PER_LOAD, sortedUsersWithRisk.length))} // MODIFIED LINE
                             className="text-sm font-medium text-white bg-teal-600 px-4 py-2 rounded-md hover:bg-teal-700 transition"
                         >
-                            View More ({usersWithRisk.length - visibleUserCount} remaining)
+                            View More ({sortedUsersWithRisk.length - visibleUserCount} remaining) {/* MODIFIED LINE */}
                         </button>
                     ) : (
                         <button
