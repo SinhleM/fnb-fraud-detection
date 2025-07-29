@@ -1,10 +1,10 @@
+// frontend/src/pages/Home.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import StatsCard from '../components/StatsCard';
 import UserList from '../components/UserList';
 import FraudTransactionsList from '../components/FraudTransactionsList';
-import TransactionFilters from '../components/TransactionFilters';
 import UserDetailPage from './UserDetailPage';
 import FraudTrendChart from '../components/FraudTrendChart';
 import TransactionChart from '../components/TransactionChart';
@@ -19,17 +19,9 @@ const fetchTransactions = () =>
 const Home = () => {
   const [users, setUsers] = useState([]);
   const [transactions, setTransactions] = useState([]);
-  const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [selectedUserData, setSelectedUserData] = useState(null);
-
-  const [filters, setFilters] = useState({
-    dateFrom: '',
-    dateTo: '',
-    minAmount: '',
-    maxAmount: '',
-  });
 
   const fetchData = useCallback(async () => {
     setIsRefreshing(true);
@@ -50,7 +42,6 @@ const Home = () => {
 
       setUsers(usersData);
       setTransactions(processedTransactions);
-      setFilteredTransactions(processedTransactions);
       setLastUpdated(new Date());
 
       console.log('📦 Fetched data:', {
@@ -70,36 +61,6 @@ const Home = () => {
     return () => clearInterval(intervalId);
   }, [fetchData]);
 
-  useEffect(() => {
-    let tempTransactions = transactions;
-
-    if (filters.dateFrom) {
-      const fromDate = new Date(filters.dateFrom);
-      tempTransactions = tempTransactions.filter(
-        tx => new Date(tx.timestamp) >= fromDate
-      );
-    }
-
-    if (filters.dateTo) {
-      const toDate = new Date(filters.dateTo);
-      tempTransactions = tempTransactions.filter(
-        tx => new Date(tx.timestamp) <= toDate
-      );
-    }
-
-    if (filters.minAmount) {
-      const minAmount = parseFloat(filters.minAmount);
-      tempTransactions = tempTransactions.filter(tx => tx.amount >= minAmount);
-    }
-
-    if (filters.maxAmount) {
-      const maxAmount = parseFloat(filters.maxAmount);
-      tempTransactions = tempTransactions.filter(tx => tx.amount <= maxAmount);
-    }
-
-    setFilteredTransactions(tempTransactions);
-  }, [transactions, filters]);
-
   const handleUserClick = user => {
     const userTransactions = transactions.filter(
       tx => tx.user_id === user.user_id
@@ -111,8 +72,8 @@ const Home = () => {
     setSelectedUserData(null);
   };
 
-  const totalTransactions = filteredTransactions.length;
-  const fraudulentTxns = filteredTransactions.filter(
+  const totalTransactions = transactions.length;
+  const fraudulentTxns = transactions.filter(
     tx => Number(tx.is_fraud) === 1
   ).length;
 
@@ -140,8 +101,6 @@ const Home = () => {
       />
 
       <main className="flex-grow w-full">
-        <TransactionFilters filters={filters} setFilters={setFilters} />
-
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-0">
           <StatsCard title="Total Users" value={users.length} />
           <StatsCard title="Total Transactions" value={totalTransactions} />
@@ -154,29 +113,28 @@ const Home = () => {
             <h2 className="text-xl font-semibold mb-4">
               Monthly Transaction Volume
             </h2>
-            <TransactionChart data={filteredTransactions} />
+            <TransactionChart data={transactions} />
           </div>
           <div className="bg-white p-6 shadow-md border border-gray-300">
             <h2 className="text-xl font-semibold mb-4">
               Weekly Fraud Trend
             </h2>
-            <FraudTrendChart
-              data={filteredTransactions.filter(tx => tx.is_fraud)}
-            />
+            <FraudTrendChart data={transactions.filter(tx => tx.is_fraud)} />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-0">
-          <div className="xl:col-span-1">
+        {/* Ensure items-stretch is here, and h-full on children */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-0 items-stretch">
+          <div className="xl:col-span-1 h-full"> {/* h-full remains here */}
             <UserList
               users={users}
               transactions={transactions}
               onUserClick={handleUserClick}
             />
           </div>
-          <div className="xl:col-span-2">
+          <div className="xl:col-span-2 h-full"> {/* h-full remains here */}
             <FraudTransactionsList
-              transactions={filteredTransactions.filter(tx => tx.is_fraud)}
+              transactions={transactions.filter(tx => tx.is_fraud)}
             />
           </div>
         </div>

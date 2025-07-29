@@ -1,20 +1,24 @@
-import React from 'react';
+// frontend/src/components/UserList.jsx
+import React, { useState } from 'react'; // Import useState
 import { calculateRiskScore } from '../utils/calculateRiskScore';
 
 const RiskBadge = ({ level }) => {
-    // Keep baseClasses as is, since rounding is for the badge itself, not the component container.
     const baseClasses = "px-2 py-1 text-xs font-semibold rounded-full";
     const styles = {
         Low: "bg-gray-200 text-gray-800",
         Medium: "bg-yellow-200 text-yellow-800",
         High: "bg-red-200 text-red-800",
     };
-    return <span className={`${baseClasses} ${styles[level] || styles.Low}`}>{level || 'Low'} Risk</span>;
+    return <span className={`${baseClasses} ${styles[level] || styles.Low}}`}>{level || 'Low'} Risk</span>;
 };
 
 const UserList = ({ users = [], transactions = [], onUserClick }) => {
     const safeUsers = Array.isArray(users) ? users : [];
     const safeTransactions = Array.isArray(transactions) ? transactions : [];
+
+    // State to manage how many users are currently visible
+    const [visibleUserCount, setVisibleUserCount] = useState(5); // Initially show 5 users
+    const USERS_PER_LOAD = 5; // How many more users to show each time "View More" is clicked
 
     const usersWithRisk = safeUsers.map(user => {
         const userIdStr = String(user.user_id).trim();
@@ -28,13 +32,28 @@ const UserList = ({ users = [], transactions = [], onUserClick }) => {
         return { ...user, score: score, level: level };
     });
 
+    // Determine the users to display based on visibleUserCount
+    const displayedUsers = usersWithRisk.slice(0, visibleUserCount);
+
+    // Check if there are more users to show
+    const hasMoreUsers = usersWithRisk.length > visibleUserCount;
+
+    const handleViewMore = () => {
+        // Increase the count by USERS_PER_LOAD, but don't exceed the total number of users
+        setVisibleUserCount(prevCount => Math.min(prevCount + USERS_PER_LOAD, usersWithRisk.length));
+    };
+
+    const handleViewLess = () => {
+        // Reset to the initial 5 users
+        setVisibleUserCount(5);
+    };
+
     return (
-        // Removed rounded-lg from the main container div
-        <div className="bg-white p-6 shadow-md border border-gray-300">
+        <div className="bg-white p-6 shadow-md border border-gray-300 flex flex-col flex-1 overflow-hidden">
             <h2 className="text-xl font-semibold mb-4 text-gray-800">Users Overview</h2>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto flex-1 overflow-y-auto">
                 <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-gray-50 sticky top-0 z-10">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risk Score</th>
@@ -42,25 +61,54 @@ const UserList = ({ users = [], transactions = [], onUserClick }) => {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {usersWithRisk.map(user => (
-                            <tr
-                                key={user.user_id}
-                                onClick={() => onUserClick && onUserClick(user)}
-                                className="hover:bg-gray-50 cursor-pointer"
-                            >
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                                    <div className="text-sm text-gray-500">{user.email}</div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">{user.score}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <RiskBadge level={user.level} />
+                        {displayedUsers.length > 0 ? (
+                            displayedUsers.map(user => (
+                                <tr
+                                    key={user.user_id}
+                                    onClick={() => onUserClick && onUserClick(user)}
+                                    className="hover:bg-gray-50 cursor-pointer"
+                                >
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                                        <div className="text-sm text-gray-500">{user.email}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">{user.score}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <RiskBadge level={user.level} />
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="3" className="px-6 py-4 text-center text-sm text-gray-500">
+                                    No users found.
                                 </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </div>
+
+            {/* View More/View Less button */}
+            {usersWithRisk.length > USERS_PER_LOAD && ( // Only show button if total users > initial display limit
+                <div className="mt-4 text-center">
+                    {hasMoreUsers ? (
+                        <button
+                            onClick={handleViewMore}
+                            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            View More ({usersWithRisk.length - visibleUserCount} remaining)
+                        </button>
+                    ) : (
+                        <button
+                            onClick={handleViewLess}
+                            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                        >
+                            View Less
+                        </button>
+                    )}
+                </div>
+            )}
         </div>
     );
 };
